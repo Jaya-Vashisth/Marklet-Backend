@@ -1,6 +1,5 @@
 import { Router } from "express";
 import passport from "../config/passport.config.js";
-import prisma from "../prisma.js";
 
 const router = Router();
 

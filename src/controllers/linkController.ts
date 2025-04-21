@@ -3,9 +3,6 @@ import puppeteer from "puppeteer";
 import axios from "axios";
 import { getEmbedding } from "../services/embeddingService.js";
 import prisma from "../prisma.js";
-import { request } from "http";
-import { error } from "console";
-import { PassThrough } from "stream";
 
 type YoutubeApiResponses = {
   items: {
@@ -70,6 +67,8 @@ const fetchWebsiteMetadata = async (url: string) => {
         : new URL(imgUrl, window.location.href).href;
     };
 
+    console.log(title, bodyText, ogImage, favIcon, firstImg);
+
     //return the metadata object
     return {
       title,
@@ -90,8 +89,10 @@ const fetchWebsiteMetadata = async (url: string) => {
 const fethYoutubeMetadata = async (url: string) => {
   try {
     const vId = url.match(
-      /(?:youtube\.com\/watch\?v= |youtu\.be\/)([^&]+)/
+      /(?:youtube\.com\/.*[?&]v=|youtu\.be\/)([^&]+)/i
     )?.[1];
+
+    console.log(vId);
 
     if (!vId) throw new Error("Invalid Youtube URL");
 
@@ -99,7 +100,10 @@ const fethYoutubeMetadata = async (url: string) => {
       `https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${vId}&key=${YOUTUBE_API_KEY}`
     );
 
+    console.log(responses);
+
     const videoInfo = responses.data.items[0].snippet;
+    console.log(videoInfo);
     if (!videoInfo) throw new Error("No video found");
 
     return {
@@ -186,7 +190,7 @@ export const createLink = async (request: Request, response: Response) => {
       `title+${metadata.title}\nDate:${createdAt}\n Content : ${metadata.content}`
     );
 
-    const contentType = "LINK";
+    const Type = "LINK";
     const metadataJson = { thumbnail: metadata.thumbnail };
 
     const note =
@@ -198,14 +202,14 @@ export const createLink = async (request: Request, response: Response) => {
           ${metadata.content},
           ${embedding}::vector,
           ${userId},
-          ${contentType}::ContentType,
+          ${Type}::"ContentType",
           ${createdAt},
-          ${createdAt},
+          ${createdAt}
         )
           RETURNING *;
           `;
 
-    return response.status(201).json(note);
+    return response.status(201).json({ note, message: "created successfully" });
   } catch (error) {
     console.error("Error creating link", error);
     return response.status(500).json({ message: "Internal server error" });

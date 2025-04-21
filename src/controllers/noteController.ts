@@ -49,7 +49,7 @@ export const createNote = async (req: Request, res: Response) => {
   }
 };
 
-export const deleteNode = async (req: Request, res: Response) => {
+export const deleteNote = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
 
