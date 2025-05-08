@@ -54,6 +54,7 @@ app.use(passport.session());
 // app.use(securityMiddleware);
 app.use(errorHandler);
 
+
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/content", contentRoutes);
 app.use("/api/v1/note", noteRoutes);
@@ -66,16 +67,17 @@ app.get("/", (req: Request, res: Response) => {
   res.status(200).json({ message: "Server running successfully!" });
 });
 
-app.listen(port, async () => {
-  console.log(`Server is running on port ${port}`);
+// app.listen(port, async () => {
+//   console.log(`Server is running on port ${port}`);
 
-  try {
-    await prisma.$connect();
-    console.log("Connected to database successfully");
-  } catch (err) {
-    console.log("Error connecting to database", err);
-  }
-});
+//   try {
+//     await prisma.$connect();
+//     console.log("Connected to database successfully");
+//   } catch (err) {
+//     console.log("Error connecting to database", err);
+//   }
+// });
+
 
 
 export default app;
