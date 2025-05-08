@@ -1,14 +1,14 @@
 import express, { Request, Response } from "express";
-import { errorHandler } from "./middlewares/errorHandler.js";
 // import { rateLimiter } from "./middlewares/rateLimiter.js";
 // import { securityMiddleware } from "./middlewares/security.js";
+import { errorHandler } from "./middlewares/errorHandler.js";
 import dotenv from "dotenv";
 
 import authRoutes from "./routes/authRoutes.js";
 import contentRoutes from "./routes/contentRoutes.js";
 import noteRoutes from "./routes/noteRoutes.js";
 import documentRoutes from "./routes/documentRoute.js";
-// import searchRoutes from "./routes/searchRoute.js";
+import searchRoutes from "./routes/searchRoutes.js";
 import linkRoutes from "./routes/linkRoutes.js";
 import sessionConfig from "./config/session.config.js";
 import passport from "./config/passport.config.js";
@@ -21,21 +21,21 @@ const port = parseInt(process.env.PORT || "3000", 10);
 
 const app = express();
 
-// const allowedOrigins = [process.env.CLIENT_URL || "http://localhost:5173"];
+const allowedOrigins = [process.env.CLIENT_URL || "http://localhost:5173"];
 
-// app.use(
-//   cors({
-//     origin: function (origin, callback) {
-//       if (!origin || allowedOrigins.includes(origin)) {
-//         callback(null, true);
-//       } else {
-//         callback(new Error("Not allowed by Cors"));
-//       }
-//     },
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by Cors"));
+      }
+    },
 
-//     credentials: true,
-//   })
-// );
+    credentials: true,
+  })
+);
 
 //parse incoming json requests
 app.use(express.json());
@@ -58,8 +58,8 @@ app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/content", contentRoutes);
 app.use("/api/v1/note", noteRoutes);
 app.use("/api/v1/link", linkRoutes);
-app.use("/api/v1/document", documentRoutes);
-// app.use("/api/v1/search", searchRoutes);
+app.use("/api/v1/documents", documentRoutes);
+app.use("/api/v1/search", searchRoutes);
 
 //basic endpoint to test the server
 app.get("/", (req: Request, res: Response) => {

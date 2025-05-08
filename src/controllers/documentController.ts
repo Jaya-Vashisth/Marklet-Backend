@@ -19,6 +19,8 @@ export const uploadDocument = async (req: Request, res: Response) => {
 
     const tebiFileUrl = await uploadToTebiStorage(file); // Upload the file to Tebi storage
 
+    console.log(tebiFileUrl);
+
     const { content, embedding, metadata } = await processDocument(file); // Process the document and get content, embedding, and metadata
     const contentType = "DOCUMENT";
 
@@ -39,14 +41,10 @@ export const uploadDocument = async (req: Request, res: Response) => {
     `;
 
     res.status(201).json(document);
-  } catch {
-    Error;
-  }
-  {
-    console.error("Error uploading document:", Error);
-    res.status(500).json({
-      error: "Failed to upload document",
-      details: Error instanceof Error ? Error.message : "Unknown error",
-    });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Unknown error";
+    console.log(message);
+
+    res.status(500).json({ error: "Upload failed", details: message });
   }
 };

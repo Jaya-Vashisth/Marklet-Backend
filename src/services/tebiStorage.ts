@@ -1,8 +1,10 @@
 import { S3 } from "@aws-sdk/client-s3";
 import { Upload } from "@aws-sdk/lib-storage";
 
+console.log(process.env.TEBI_ENDPOINT_URL);
+
 const s3 = new S3({
-  endpoint: process.env.TEBI_ENDPOINT as string,
+  endpoint: process.env.TEBI_ENDPOINT_URL as string,
   region: process.env.TEBI_REGION as string,
   credentials: {
     accessKeyId: process.env.TEBI_ACCESS_KEY as string,
@@ -30,5 +32,5 @@ export const uploadToTebiStorage = async (file: Express.Multer.File) => {
   });
 
   await upload.done();
-  return `${process.env.TEBI_ENDPOINT}/${process.env.TEBI_BUCKET_NAME}/${fileKey}`;
+  return `${process.env.TEBI_ENDPOINT_URL}/${process.env.TEBI_BUCKET_NAME}/${fileKey}`;
 };
