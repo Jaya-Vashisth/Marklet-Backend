@@ -67,16 +67,16 @@ app.get("/", (req: Request, res: Response) => {
   res.status(200).json({ message: "Server running successfully!" });
 });
 
-// app.listen(port, async () => {
-//   console.log(`Server is running on port ${port}`);
+app.listen(port, async () => {
+  console.log(`Server is running on port ${port}`);
 
-//   try {
-//     await prisma.$connect();
-//     console.log("Connected to database successfully");
-//   } catch (err) {
-//     console.log("Error connecting to database", err);
-//   }
-// });
+  try {
+    await prisma.$connect();
+    console.log("Connected to database successfully");
+  } catch (err) {
+    console.log("Error connecting to database", err);
+  }
+});
 
 
 

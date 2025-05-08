@@ -7,6 +7,7 @@ router.get("/", (req, res) => {
   console.log("Auth route hit");
   res.send('<a href="/api/v1/auth/google">Login with Google</a>');
 });
+
 //route to authenticate user using google strategy
 router.get(
   "/google",
