@@ -24,17 +24,17 @@ const app = express();
 const allowedOrigins = [process.env.CLIENT_URL || "http://localhost:5173"];
 
 app.use(
-  cors({
-    origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by Cors"));
-      }
-    },
+    cors({
+        origin: function (origin, callback) {
+            if (!origin || allowedOrigins.includes(origin)) {
+                callback(null, true);
+            } else {
+                callback(new Error("Not allowed by Cors"));
+            }
+        },
 
-    credentials: true,
-  })
+        credentials: true,
+    }),
 );
 
 //parse incoming json requests
@@ -54,7 +54,6 @@ app.use(passport.session());
 // app.use(securityMiddleware);
 app.use(errorHandler);
 
-
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/content", contentRoutes);
 app.use("/api/v1/note", noteRoutes);
@@ -64,20 +63,18 @@ app.use("/api/v1/search", searchRoutes);
 
 //basic endpoint to test the server
 app.get("/", (req: Request, res: Response) => {
-  res.status(200).json({ message: "Server running successfully!" });
+    res.status(200).json({ message: "Server running successfully!" });
 });
 
 app.listen(port, async () => {
-  console.log(`Server is running on port ${port}`);
+    console.log(`Server is running on port ${port}`);
 
-  try {
-    await prisma.$connect();
-    console.log("Connected to database successfully");
-  } catch (err) {
-    console.log("Error connecting to database", err);
-  }
+    try {
+        await prisma.$connect();
+        console.log("Connected to database successfully");
+    } catch (err) {
+        console.log("Error connecting to database", err);
+    }
 });
-
-
 
 export default app;
