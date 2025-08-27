@@ -1,6 +1,4 @@
 import express, { Request, Response } from "express";
-// import { rateLimiter } from "./middlewares/rateLimiter.js";
-// import { securityMiddleware } from "./middlewares/security.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
 import dotenv from "dotenv";
 
@@ -49,10 +47,8 @@ app.use(sessionConfig);
 app.use(passport.initialize());
 app.use(passport.session());
 
-//middlewares
-// app.use(rateLimiter);
-// app.use(securityMiddleware);
-app.use(errorHandler);
+
+
 
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/content", contentRoutes);
@@ -61,10 +57,14 @@ app.use("/api/v1/link", linkRoutes);
 app.use("/api/v1/documents", documentRoutes);
 app.use("/api/v1/search", searchRoutes);
 
+
+
 //basic endpoint to test the server
 app.get("/", (req: Request, res: Response) => {
     res.status(200).json({ message: "Server running successfully!" });
 });
+
+app.use(errorHandler);
 
 app.listen(port, async () => {
     console.log(`Server is running on port ${port}`);
